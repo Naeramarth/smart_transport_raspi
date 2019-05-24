@@ -32,6 +32,8 @@ client.loop_start() #start the loop
 print("Subscribing to topic","house/bulbs/bulb1")
 client.subscribe("/trn/temp")
 client.subscribe("/trn/humid")
+client.subscribe("/trn/preassure")
+
 #print("Publishing message to topic","house/bulbs/bulb1")
 #client.publish("/trn/test","new success")
 time.sleep(100) # wait

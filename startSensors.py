@@ -66,10 +66,16 @@ def TemperaturAuswertung():
 DHTSensor = Adafruit_DHT.DHT11
 
 # Hier kann der Pin deklariert werden, an dem das Sensormodul angeschlossen ist
-GPIO_Pin = 23
+GPIO_pin_humidity = 23
 
 #Preassure
 sensor = BMP280.BMP280()
+
+#Vibration
+GPIO_pin_vibration = 24
+GPIO.setup(GPIO_pin_vibration, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+
+
 
 #Publish sensor values
 def publish_temp():
@@ -79,13 +85,12 @@ def publish_temp():
 
 def publish_humidity():
 
-    humidity, temp = Adafruit_DHT.read_retry(DHTSensor, GPIO_Pin)
+    humidity, temp = Adafruit_DHT.read_retry(DHTSensor, GPIO_pin_humidity)
     client.publish("/trn/humid", humidity)
 
-def publish_vibration():
+def publish_vibration(null):
 
-
-    client.publish("/trn/vibra", "vibe:3")
+    client.publish("/trn/vibra", "true")
 
 def publish_preassure():
 
@@ -93,10 +98,9 @@ def publish_preassure():
     client.publish("/trn/preassure", preassure)
 
 
-#MQTT components
-#def on_connect(client, userdata, flags, rc):
-#    print("Connected with result code "+str(rc))
-
+#Adding for Vibration sensor
+# Beim Detektieren eines Signals (fallende Signalflanke) wird die Ausgabefunktion ausgeloest
+GPIO.add_event_detect(GPIO_pin_vibration, GPIO.FALLING, callback=publish_vibration(), bouncetime=100)
 
 
 if __name__ == '__main__':
