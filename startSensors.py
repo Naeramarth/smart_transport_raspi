@@ -66,4 +66,4 @@ if __name__ == '__main__':
         for p in processes:
             p.start()
 
-        time.sleep(sleep_time)/
+        time.sleep(sleep_time)
