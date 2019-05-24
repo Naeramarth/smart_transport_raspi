@@ -1,5 +1,6 @@
 import paho.mqtt.client as mqtt
 import ssl
+import time
 import multiprocessing as mp
 
 #Settings
@@ -7,20 +8,29 @@ broker_address = "mqtt.iot-embedded.de"
 port = 8883
 username = "transport"
 password = "{Kaputt}"
+sleep_time = 5
 
 
 #Sensor functions
-def read_temp():
-    print("Temp")
+def publish_temp():
 
-def read_humidity():
-    print("humidity")
 
-def read_vibration():
-    print("vibration")
+    client.publish("/trn/temp", "new success")
 
-def read_preassure():
-    print("preassure")
+def publish_humidity():
+
+
+    client.publish("/trn/humid", "new success")
+
+def publish_vibration():
+
+
+    client.publish("/trn/vibra", "new success")
+
+def publish_preassure():
+
+
+    client.publish("/trn/preassure", "new success")
 
 
 #MQTT components
@@ -43,13 +53,17 @@ if __name__ == '__main__':
     client.loop_start()
 
     #Start fetching sensor data
-    output = mp.Queue()
+    while(True):
 
-    processes = [mp.Process(target=read_temp()),
-                 mp.Process(target=read_humidity()),
-                 mp.Process(target=read_vibration()),
-                 mp.Process(target=read_preassure())
-                 ]
+        output = mp.Queue()
 
-    for p in processes:
-        p.start()
+        processes = [mp.Process(target=publish_temp()),
+                     mp.Process(target=publish_humidity()),
+                     mp.Process(target=publish_vibration()),
+                     mp.Process(target=publish_preassure())
+                     ]
+
+        for p in processes:
+            p.start()
+
+        time.sleep(sleep_time)
