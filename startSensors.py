@@ -100,7 +100,7 @@ def publish_preassure():
 
 #Adding for Vibration sensor
 # Beim Detektieren eines Signals (fallende Signalflanke) wird die Ausgabefunktion ausgeloest
-GPIO.add_event_detect(GPIO_pin_vibration, GPIO.FALLING, callback=publish_vibration(), bouncetime=100)
+GPIO.add_event_detect(GPIO_pin_vibration, GPIO.FALLING, callback=publish_vibration, bouncetime=100)
 
 
 if __name__ == '__main__':
