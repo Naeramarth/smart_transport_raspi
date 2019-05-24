@@ -1,10 +1,10 @@
 import paho.mqtt.client as mqtt
 import ssl
-import time
 import multiprocessing as mp
 import glob
 import time
 import RPi.GPIO as GPIO
+import Adafruit_DHT
 
 ##############################################
 #Settings
@@ -17,12 +17,10 @@ username = "transport"
 password = "{Kaputt}"
 sleep_time = 5
 
-
-
-
 ##############################################
 #Initialize Sensors
 ##############################################
+
 
 #Temperature
 GPIO.setmode(GPIO.BCM)
@@ -61,7 +59,13 @@ def TemperaturAuswertung():
         temp_c = float(temp_string) / 1000.0
         return temp_c
 
-#
+#Humidity
+# Sensor should be set to Adafruit_DHT.DHT11,
+# Adafruit_DHT.DHT22, or Adafruit_DHT.AM2302.
+DHTSensor = Adafruit_DHT.DHT11
+
+# Hier kann der Pin deklariert werden, an dem das Sensormodul angeschlossen ist
+GPIO_Pin = 23
 
 #Publish sensor values
 def publish_temp():
@@ -71,8 +75,8 @@ def publish_temp():
 
 def publish_humidity():
 
-
-    client.publish("/trn/humid", "humid:2")
+    humidity, temp = Adafruit_DHT.read_retry(DHTSensor, GPIO_Pin)
+    client.publish("/trn/humid", humidity)
 
 def publish_vibration():
 
@@ -119,5 +123,5 @@ if __name__ == '__main__':
                 p.start()
 
             time.sleep(sleep_time)
-    except KeyboardInterrupt
+    except KeyboardInterrupt:
         GPIO.cleanup()
