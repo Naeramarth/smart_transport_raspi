@@ -7,6 +7,6 @@ Raspi Settings to be done:
   For Temperature:
   
     - Instert "dtoverlay=w1-gpio,gpiopin=4" to sudo nano /boot/config. --> reboot
-    - Rpi needed? 
+    - Rpi package needed or already installed? 
     
 
