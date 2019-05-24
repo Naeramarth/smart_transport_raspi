@@ -5,6 +5,7 @@ import glob
 import time
 import RPi.GPIO as GPIO
 import Adafruit_DHT
+import Adafruit_BMP.BMP280 as BMP280
 
 ##############################################
 #Settings
@@ -67,6 +68,9 @@ DHTSensor = Adafruit_DHT.DHT11
 # Hier kann der Pin deklariert werden, an dem das Sensormodul angeschlossen ist
 GPIO_Pin = 23
 
+#Preassure
+sensor = BMP280.BMP280()
+
 #Publish sensor values
 def publish_temp():
 
@@ -85,13 +89,13 @@ def publish_vibration():
 
 def publish_preassure():
 
-
-    client.publish("/trn/preassure", "preassure:4")
+    preassure = sensor.read_pressure()
+    client.publish("/trn/preassure", preassure)
 
 
 #MQTT components
-def on_connect(client, userdata, flags, rc):
-    print("Connected with result code "+str(rc))
+#def on_connect(client, userdata, flags, rc):
+#    print("Connected with result code "+str(rc))
 
 
 
@@ -99,7 +103,7 @@ if __name__ == '__main__':
 
     #Initialize MQTT Client
     client = mqtt.Client("Sensors")  # create new instance
-    client.on_connect = on_connect
+#    client.on_connect = on_connect
     client.tls_set(ca_certs=None, certfile=None, keyfile=None, cert_reqs=ssl.CERT_REQUIRED,
                    tls_version=ssl.PROTOCOL_TLS, ciphers=None)
     client.username_pw_set(username, password)
@@ -115,9 +119,10 @@ if __name__ == '__main__':
 
             output = mp.Queue()
 
-            print("Fetching sensor data")
+#            print("Fetching sensor data")
             processes = [mp.Process(target=publish_temp()),
-                         mp.Process(target=publish_humidity())
+                         mp.Process(target=publish_humidity()),
+                         mp.Process(target=publish_preassure())
                          ]
 
             for p in processes:
