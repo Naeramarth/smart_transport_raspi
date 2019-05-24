@@ -57,6 +57,7 @@ if __name__ == '__main__':
 
         output = mp.Queue()
 
+        print("Fetching sensor data")
         processes = [mp.Process(target=publish_temp()),
                      mp.Process(target=publish_humidity()),
                      mp.Process(target=publish_vibration()),
