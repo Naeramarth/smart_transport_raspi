@@ -15,22 +15,22 @@ sleep_time = 5
 def publish_temp():
 
 
-    client.publish("/trn/temp", "new success")
+    client.publish("/trn/temp", "temp: 1")
 
 def publish_humidity():
 
 
-    client.publish("/trn/humid", "new success")
+    client.publish("/trn/humid", "humid:2")
 
 def publish_vibration():
 
 
-    client.publish("/trn/vibra", "new success")
+    client.publish("/trn/vibra", "vibe:3")
 
 def publish_preassure():
 
 
-    client.publish("/trn/preassure", "new success")
+    client.publish("/trn/preassure", "preassure:4")
 
 
 #MQTT components
@@ -66,4 +66,4 @@ if __name__ == '__main__':
         for p in processes:
             p.start()
 
-        time.sleep(sleep_time)
+        time.sleep(sleep_time)/
