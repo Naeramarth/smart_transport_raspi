@@ -107,7 +107,6 @@ if __name__ == '__main__':
 
     #Initialize MQTT Client
     client = mqtt.Client("Sensors")  # create new instance
-#    client.on_connect = on_connect
     client.tls_set(ca_certs=None, certfile=None, keyfile=None, cert_reqs=ssl.CERT_REQUIRED,
                    tls_version=ssl.PROTOCOL_TLS, ciphers=None)
     client.username_pw_set(username, password)
