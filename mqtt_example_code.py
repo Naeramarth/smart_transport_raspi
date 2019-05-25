@@ -11,6 +11,8 @@ def on_message(client, userdata, message):
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
 
+def on_log(client, userdata, level, buf):
+    print("log: ",buf)
 
 broker_address = "mqtt.iot-embedded.de"
 port = 8883
@@ -19,6 +21,7 @@ port = 8883
 print("creating new instance")
 client = mqtt.Client("P1") #create new instance
 client.on_connect = on_connect
+client.on_log = on_log
 client.on_message=on_message #attach function to callback
 client.tls_set(ca_certs=None, certfile=None, keyfile=None, cert_reqs=ssl.CERT_REQUIRED,
     tls_version=ssl.PROTOCOL_TLS, ciphers=None)
@@ -29,13 +32,18 @@ client.connect(broker_address, port) #connect to broker
 client.loop_start() #start the loop
 
 
-print("Subscribing to topic","house/bulbs/bulb1")
-client.subscribe("/trn/temp")
-client.subscribe("/trn/humid")
-client.subscribe("/trn/preassure")
-client.subscribe("/trn/vibra")
+print("Subscribing to topics")
+
+#client.subscribe("/trn/temp")
+#client.subscribe("/trn/preassure")
+#client.subscribe("/trn/temp")
+#client.subscribe("/trn/vibra")
+client.subscribe("#")
 
 #print("Publishing message to topic","house/bulbs/bulb1")
-#client.publish("/trn/test","new success")
+#while(True):
+#    client.publish("/trn/test","new success")
+#    client.publish("/trn/test","new success2")
 time.sleep(100) # wait
 client.loop_stop() #stop the loop
+#client.loop_forever()

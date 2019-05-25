@@ -81,32 +81,35 @@ GPIO.setup(GPIO_pin_vibration, GPIO.IN, pull_up_down = GPIO.PUD_UP)
 def publish_temp():
 
     temp = TemperaturAuswertung()
-    client.publish("/trn/temp", temp)
+    client.publish("/trn/tem", temp)
 
 def publish_humidity():
 
     humidity, temp = Adafruit_DHT.read_retry(DHTSensor, GPIO_pin_humidity)
-    client.publish("/trn/humid", humidity)
+    client.publish("/trn/hum", humidity)
 
 def publish_vibration(null):
 
-    client.publish("/trn/vibra", "true")
+    client.publish("/trn/vib", "true")
 
 def publish_preassure():
 
     preassure = sensor.read_pressure()
-    client.publish("/trn/preassure", preassure)
+    client.publish("/trn/pre", preassure)
 
 
 #Adding for Vibration sensor
 # Beim Detektieren eines Signals (fallende Signalflanke) wird die Ausgabefunktion ausgeloest
 GPIO.add_event_detect(GPIO_pin_vibration, GPIO.FALLING, callback=publish_vibration, bouncetime=100)
 
+def on_log(client, userdata, level, buf):
+    print("log: ",buf)
 
 if __name__ == '__main__':
 
     #Initialize MQTT Client
     client = mqtt.Client("Sensors")  # create new instance
+    client.on_log = on_log
     client.tls_set(ca_certs=None, certfile=None, keyfile=None, cert_reqs=ssl.CERT_REQUIRED,
                    tls_version=ssl.PROTOCOL_TLS, ciphers=None)
     client.username_pw_set(username, password)
@@ -133,4 +136,5 @@ if __name__ == '__main__':
 
             time.sleep(sleep_time)
     except KeyboardInterrupt:
+        client.loop_stop()
         GPIO.cleanup()
