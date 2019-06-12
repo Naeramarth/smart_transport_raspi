@@ -1,6 +1,5 @@
 import paho.mqtt.client as mqtt
 import ssl
-import multiprocessing as mp
 import glob
 import time
 import RPi.GPIO as GPIO
@@ -12,11 +11,11 @@ import Adafruit_BMP.BMP280 as BMP280
 ##############################################
 
 #MQTT
-broker_address = "mqtt.iot-embedded.de"
-port = 8883
+broker_address = "iot.eclipse.org"
+port = 1883
 username = "transport"
 password = "{Kaputt}"
-sleep_time = 5
+sleep_time = 2
 
 ##############################################
 #Initialize Sensors
@@ -108,14 +107,16 @@ def on_log(client, userdata, level, buf):
 if __name__ == '__main__':
 
     #Initialize MQTT Client
-    client = mqtt.Client("Sensors")  # create new instance
+    client = mqtt.Client(protocol=mqtt.MQTTv311)  # create new instance
     client.on_log = on_log
-    client.tls_set(ca_certs=None, certfile=None, keyfile=None, cert_reqs=ssl.CERT_REQUIRED,
-                   tls_version=ssl.PROTOCOL_TLS, ciphers=None)
-    client.username_pw_set(username, password)
+    #client.tls_set(ca_certs=None, certfile=None, keyfile=None, cert_reqs=ssl.CERT_REQUIRED,
+    #               tls_version=ssl.PROTOCOL_TLS, ciphers=None)
+    #client.username_pw_set(username, password)
 
     #Connect Client
     client.connect(broker_address, port)
+    time.sleep(5)
+
     client.loop_start()
 
     #Start fetching sensor data
@@ -123,15 +124,14 @@ if __name__ == '__main__':
 
         while(True):
 
-            processes = [mp.Process(target=publish_temp()),
-                         mp.Process(target=publish_humidity()),
-                         mp.Process(target=publish_preassure())
-                         ]
-
-            for p in processes:
-                p.start()
-
             time.sleep(sleep_time)
+            publish_temp()
+            time.sleep(sleep_time)
+            publish_humidity()
+            time.sleep(sleep_time)
+            publish_preassure()
+
+
     except KeyboardInterrupt:
         client.loop_stop()
         GPIO.cleanup()

@@ -19,7 +19,7 @@ port = 8883
 
 
 print("creating new instance")
-client = mqtt.Client("P1") #create new instance
+client = mqtt.Client() #create new instance
 client.on_connect = on_connect
 client.on_log = on_log
 client.on_message=on_message #attach function to callback
@@ -29,6 +29,7 @@ client.username_pw_set("transport", "{Kaputt}")
 
 print("connecting to broker")
 client.connect(broker_address, port) #connect to broker
+#time.sleep(3)
 client.loop_start() #start the loop
 
 
@@ -38,7 +39,8 @@ print("Subscribing to topics")
 #client.subscribe("/trn/preassure")
 #client.subscribe("/trn/temp")
 #client.subscribe("/trn/vibra")
-client.subscribe("#")
+time.sleep(10)
+client.subscribe("/trn/#")
 
 #print("Publishing message to topic","house/bulbs/bulb1")
 #while(True):
@@ -46,4 +48,4 @@ client.subscribe("#")
 #    client.publish("/trn/test","new success2")
 time.sleep(100) # wait
 client.loop_stop() #stop the loop
-#client.loop_forever()
+#client.loop_forever(1)

@@ -28,3 +28,8 @@ To Be Done:
     - Instert "dtparam=i2c_arm=on" to sudo nano /boot/config.txt --> reboot
     - sudo apt-get install python-smbus i2c-tools -y
     
+  For GPS:
+  
+    - sudo apt-get install gpsd gpsd-clients python-gps
+    - sudo gpsd /dev/ttyUSB0 -F /var/run/gpsd.sock
+    - Help: http://wiki.dragino.com/index.php?title=Getting_GPS_to_work_on_Raspberry_Pi_3_Model_B
