@@ -8,7 +8,6 @@ import paho.mqtt.client as mqtt
 import RPi.GPIO as GPIO
 
 
-
 ##############################################
 #Settings
 ##############################################
@@ -33,6 +32,16 @@ def on_publish(mqttc, obj, mid):
     print("mid: " + str(mid))
     pass
 
+#Vibration Sensor
+def publish_vibration(null):
+    client.publish(prefix + deviceCode + "/vibra", True)
+
+GPIO_pin_vibration = 24
+GPIO.setup(GPIO_pin_vibration, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+GPIO.add_event_detect(GPIO_pin_vibration, GPIO.FALLING, callback=publish_vibration, bouncetime=100)
+
+
+
 if __name__ == '__main__':
 
     #Connecting to MQTT Broker
@@ -42,10 +51,9 @@ if __name__ == '__main__':
     client.connect(broker_address, port, 60)
     client.loop_start()
 
-    #GPS
+    #GPS Poller
     gpsp = GpsPoller.GpsPoller()
     gpsp.start()
-
 
     try:
 
@@ -75,6 +83,7 @@ if __name__ == '__main__':
 
             #TODO: Vibration Event Data
 
+            #TODO: Save Data to DB
 
             time.sleep(meassureInteval)
 
