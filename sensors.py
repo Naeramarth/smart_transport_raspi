@@ -7,7 +7,6 @@ import glob
 import Adafruit_DHT
 import Adafruit_BMP.BMP280 as BMP280
 
-
 ##############################################
 #Initialize Sensors
 ##############################################
@@ -60,6 +59,9 @@ GPIO_pin_humidity = 23
 ###### -Preassure- #########################
 preassureSensor = BMP280.BMP280()
 
+###### -Battery- #########################
+batteryLife = 100
+
 def currTemp():
     return TemperaturAuswertung()
 
@@ -70,5 +72,5 @@ def currHumid():
 def currPreassure():
     return preassureSensor.read_pressure()
 
-def currLocation():
-    return False
+def currBattery():
+    return batteryLife
