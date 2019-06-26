@@ -6,7 +6,8 @@ import GpsPoller
 import time
 import paho.mqtt.client as mqtt
 import RPi.GPIO as GPIO
-
+import sqlite3
+import datetime
 
 ##############################################
 #Settings
@@ -57,8 +58,15 @@ if __name__ == '__main__':
 
     try:
 
-        #sql = 'CREATE TABLE "Values" ("Id" INTEGER NOT NULL CONSTRAINT "PK_Values" PRIMARY KEY AUTOINCREMENT "Value" REAL NOT NULL, "SensorId" INTEGER NOT NULL, "Timestamp" TEXT NOT NULL )'
+        #Clear Database Tables
+        conn = sqlite3.connect('sensorData.db')
+        conn.execute("DROP TABLE IF EXISTS 'VALUES' ")
+        conn.execute("DROP TABLE IF EXISTS 'Positions' ")
+        conn.execute("CREATE TABLE 'Values' ('Id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 'Sensor' CHAR(20) NOT NULL, 'Value' INTEGER NOT NULL, 'Timestamp' CHAR(30) NOT NULL);")
+        conn.execute("CREATE TABLE 'Positions' ('Id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 'Type' CHAR(50) NOT NULL, 'Value' CHAR(50) NOT NULL, 'Timestamp' CHAR(30) NOT NULL);")
+        conn.commit()
 
+        c = conn.cursor()
 
         while(True):
 
@@ -75,19 +83,35 @@ if __name__ == '__main__':
             client.publish(prefix + deviceCode + "/humid", humid)
             client.publish(prefix + deviceCode + "/preassure", preassure)
             client.publish(prefix + deviceCode + "/battery", sensors.batteryLife)
-            if GpsPoller.gpsd != None:
+
+            # DB Insertion
+            values = [("temp", temp, str(datetime.datetime.now())),
+                      ("humid", humid, str(datetime.datetime.now())),
+                      ("preassure", preassure, str(datetime.datetime.now())),
+                      ("battery", sensors.batteryLife, str(datetime.datetime.now()))
+                      ]
+
+            c.executemany("INSERT INTO 'Values' (Sensor, Value, Timestamp) VALUES (?, ?, ?);", values)
+
+            if GpsPoller.gpsd != None and GpsPoller.gpsd.fix.latitude != 'nan' and GpsPoller.gpsd.fix.longitude != 'nan':
                 latitude = GpsPoller.gpsd.fix.latitude
                 longitude = GpsPoller.gpsd.fix.longitude
                 client.publish(prefix + deviceCode + "/location", str(latitude)+','+str(longitude))
 
+                positions = [   ("latitude", latitude, str(datetime.datetime.now())),
+                                ("longitude", longitude, str(datetime.datetime.now()))
+                             ]
+
+                c.executemany("INSERT INTO 'Positions' (Type, Value, Timestamp) VALUES (?, ?, ?);", positions)
+
+            conn.commit()
 
             #TODO: Vibration Event Data
-
-            #TODO: Save Data to DB
 
             time.sleep(meassureInteval)
 
     except KeyboardInterrupt:
+        conn.close()
         gpsp.running = False
         gpsp.join()
         client.loop_stop()
