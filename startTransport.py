@@ -69,8 +69,6 @@ if __name__ == '__main__':
 
     try:
 
-
-
         while(True):
 
             # Simulating Battery Life
