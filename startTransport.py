@@ -56,6 +56,8 @@ if __name__ == '__main__':
     gpsp = GpsPoller.GpsPoller()
     gpsp.start()
 
+    global conn
+
     try:
 
         #Clear Database Tables
