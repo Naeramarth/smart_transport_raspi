@@ -16,7 +16,7 @@ pip install paho-mqtt
 
 #Temperatursensor Setup
 echo "Setup Temperatursensor..."
-sed -i '$adtoverlay=w1-gpio,gpiopin=4' /boot/config.txt
+sudo sed -i '$adtoverlay=w1-gpio,gpiopin=4' /boot/config.txt
 #REBOOT?
 
 #Luftfeuchigkeit Setup
@@ -35,7 +35,7 @@ git clone https://github.com/bastienwirtz/Adafruit_Python_BMP.git
 cd Adafruit_Python_BMP/
 sudo python setup.py install
 cd ~
-sed -i '$adtparam=i2c_arm=on' /boot/config.txt
+sudo sed -i '$adtparam=i2c_arm=on' /boot/config.txt
 sudo apt-get install python-smbus i2c-tools -y
 
 #GPS Setup
@@ -54,9 +54,9 @@ sudo apt-get install sqlite3
 
 
 #Setup Autorun Script
-sed -i '$asudo gpsd /dev/ttyS0 -F /var/run/gpsd.sock' /etc/profile
-sed -i '$asleep 10s' /etc/profile
-sed -i '$apython startTransport.py' /etc/profile
+sudo sed -i '$asudo gpsd /dev/ttyS0 -F /var/run/gpsd.sock' /etc/profile
+sudo sed -i '$asleep 10s' /etc/profile
+sudo sed -i '$apython startTransport.py' /etc/profile
 
 
 #Reboot
