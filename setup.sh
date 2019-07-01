@@ -54,7 +54,7 @@ sudo apt-get install sqlite3
 
 
 #Setup Autorun Script
-sudo sed -i '$asudo gpsd /dev/ttyS0 -F /var/run/gpsd.sock' /etc/profile
+sudo sed -i '$asudo gpsd /dev/ttyUSB0 -F /var/run/gpsd.sock' /etc/profile
 sudo sed -i '$asleep 10s' /etc/profile
 sudo sed -i '$apython startTransport.py' /etc/profile
 
