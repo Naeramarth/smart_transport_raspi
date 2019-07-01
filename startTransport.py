@@ -62,7 +62,7 @@ if __name__ == '__main__':
     conn.execute("DROP TABLE IF EXISTS 'VALUES' ")
     conn.execute("DROP TABLE IF EXISTS 'Positions' ")
     conn.execute("CREATE TABLE 'Values' ('Id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 'Sensor' CHAR(20) NOT NULL, 'Value' INTEGER NOT NULL, 'Timestamp' CHAR(30) NOT NULL);")
-    conn.execute("CREATE TABLE 'Positions' ('Id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 'Type' CHAR(50) NOT NULL, 'Value' CHAR(50) NOT NULL, 'Timestamp' CHAR(30) NOT NULL);")
+    conn.execute("CREATE TABLE 'Positions' ('Id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 'Type' CHAR(50) NOT NULL, 'Value' CHAR(50), 'Timestamp' CHAR(30) NOT NULL);")
     conn.commit()
 
     c = conn.cursor()
@@ -94,7 +94,9 @@ if __name__ == '__main__':
 
             c.executemany("INSERT INTO 'Values' (Sensor, Value, Timestamp) VALUES (?, ?, ?);", values)
 
-            if GpsPoller.gpsd != None and GpsPoller.gpsd.fix.latitude != 'nan' and GpsPoller.gpsd.fix.longitude != 'nan':
+            if GpsPoller.gpsd != None and GpsPoller.gpsd.fix.latitude != 'nan' and GpsPoller.gpsd.fix.longitude != 'nan'\
+            and GpsPoller.gpsd.fix.latitude != '' and GpsPoller.gpsd.fix.longitude != '':
+
                 latitude = GpsPoller.gpsd.fix.latitude
                 longitude = GpsPoller.gpsd.fix.longitude
                 client.publish(prefix + deviceCode + "/location", str(latitude)+','+str(longitude))
