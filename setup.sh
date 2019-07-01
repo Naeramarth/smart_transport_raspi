@@ -3,7 +3,7 @@ echo "Packageliste wird aktualisiert..."
 sudo apt-get update
 
 #Packages upgraden
-echo "Upgrade der Packages"
+echo "Upgrade der Packages..."
 sudo apt-get upgrade
 
 #Python Pip installieren
@@ -60,7 +60,7 @@ sudo sed -i '$apython startTransport.py' /etc/profile
 
 
 #Reboot
-#sudo reboot
+sudo reboot
 
 
 
