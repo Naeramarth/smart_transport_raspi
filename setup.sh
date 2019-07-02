@@ -59,7 +59,7 @@ apt-get install sqlite3
 #Setup Autorun Script
 sed -i '$asudo gpsd /dev/ttyUSB0 -F /var/run/gpsd.sock' /etc/profile
 sed -i '$asleep 10s' /etc/profile
-sed -i '$apython /smart_transport_raspi/startTransport.py' /etc/profile
+sed -i '$apython smart_transport_raspi/startTransport.py &' /etc/profile
 
 #Reboot
 reboot
