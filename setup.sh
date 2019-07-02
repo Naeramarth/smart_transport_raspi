@@ -6,6 +6,16 @@ apt-get update
 echo "Upgrade der Packages..."
 apt-get upgrade
 
+#Setup Autologin
+echo "Setting up Auto Login..."
+systemctl set-default multi-user.target
+ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty1.service
+cat > /etc/systemd/system/getty@tty1.service.d/autologin.conf << EOF
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin $SUDO_USER --noclear %I \$TERM
+EOF
+
 #Python Pip installieren
 echo "Python pip wird installiert..."
 apt-get install python-pip
@@ -46,15 +56,6 @@ gpsd /dev/ttyUSB0 -F /var/run/gpsd.sock
 #Datenbank installieren
 echo "Datenbank wird installiert..."
 apt-get install sqlite3
-
-#Setup Autologin
-#systemctl set-default multi-user.target
-#ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty1.service
-#cat > /etc/systemd/system/getty@tty1.service.d/autologin.conf << EOF
-#[Service]
-#ExecStart=
-#ExecStart=-/sbin/agetty --autologin $SUDO_USER --noclear %I \$TERM
-#EOF
 
 #Setup Autorun Script
 sed -i '$asudo gpsd /dev/ttyUSB0 -F /var/run/gpsd.sock' /etc/profile
