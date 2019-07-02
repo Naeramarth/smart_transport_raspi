@@ -30,7 +30,6 @@ sed -i '$adtoverlay=w1-gpio,gpiopin=4' /boot/config.txt
 dtparam i2c_arm=on
 modprobe i2c-dev
 
-
 #Luftfeuchigkeit Setup
 echo "Setup Luftfeuchtigkeit..."
 git clone https://github.com/adafruit/Adafruit_Python_DHT.git
