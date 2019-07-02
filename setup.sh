@@ -1,10 +1,10 @@
 #Packageliste aktualisieren
 echo "Packageliste wird aktualisiert..."
-apt-get update
+apt-get --assume-yes update
 
 #Packages upgraden
 echo "Upgrade der Packages..."
-apt-get upgrade
+apt-get --assume-yes upgrade
 
 #Setup Autologin
 echo "Setting up Auto Login..."
@@ -18,7 +18,7 @@ EOF
 
 #Python Pip installieren
 echo "Python pip wird installiert..."
-apt-get install python-pip
+apt-get --assume-yes install python-pip
 
 #MQTT Paho für Python installieren
 echo "MQTT Paho für Python wird installiert..."
@@ -44,11 +44,11 @@ cd Adafruit_Python_BMP/
 python setup.py install
 cd ..
 sed -i '$adtparam=i2c_arm=on' /boot/config.txt
-apt-get install python-smbus i2c-tools -y
+apt-get --assume-yes install python-smbus i2c-tools -y
 
 #GPS Setup
 echo "Setup GPS..."
-apt-get install gpsd gpsd-clients python-gps
+apt-get --assume-yes install gpsd gpsd-clients python-gps
 systemctl stop gpsd.socket
 systemctl disable gpsd.socket
 #Initialer Start
@@ -56,7 +56,7 @@ gpsd /dev/ttyUSB0 -F /var/run/gpsd.sock
 
 #Datenbank installieren
 echo "Datenbank wird installiert..."
-apt-get install sqlite3
+apt-get --assume-yes install sqlite3
 
 #Setup Autorun Script
 sed -i '$asudo gpsd /dev/ttyUSB0 -F /var/run/gpsd.sock' /etc/profile
