@@ -61,7 +61,7 @@ if __name__ == '__main__':
     conn = sqlite3.connect('sensorData.db')
     conn.execute("DROP TABLE IF EXISTS 'VALUES' ")
     conn.execute("DROP TABLE IF EXISTS 'Positions' ")
-    conn.execute("CREATE TABLE 'Values' ('Id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 'Sensor' CHAR(20) NOT NULL, 'Value' INTEGER NOT NULL, 'Timestamp' CHAR(30) NOT NULL);")
+    conn.execute("CREATE TABLE 'Values' ('Id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 'Sensor' CHAR(20) NOT NULL, 'Value' INTEGER, 'Timestamp' CHAR(30) NOT NULL);")
     conn.execute("CREATE TABLE 'Positions' ('Id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 'Type' CHAR(50) NOT NULL, 'Value' CHAR(50), 'Timestamp' CHAR(30) NOT NULL);")
     conn.commit()
 

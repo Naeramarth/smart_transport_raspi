@@ -27,14 +27,14 @@ echo "Setup Luftfeuchtigkeit..."
 git clone https://github.com/adafruit/Adafruit_Python_DHT.git
 cd Adafruit_Python_DHT/
 sudo python setup.py install
-cd ~
+cd ..
 
 #Druck Setup
 echo "Setup Drucksensor..."
 git clone https://github.com/bastienwirtz/Adafruit_Python_BMP.git
 cd Adafruit_Python_BMP/
 sudo python setup.py install
-cd ~
+cd ..
 sudo sed -i '$adtparam=i2c_arm=on' /boot/config.txt
 sudo apt-get install python-smbus i2c-tools -y
 
