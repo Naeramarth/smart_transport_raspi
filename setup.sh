@@ -27,8 +27,7 @@ pip install paho-mqtt
 #Temperatursensor Setup
 echo "Setup Temperatursensor..."
 sed -i '$adtoverlay=w1-gpio,gpiopin=4' /boot/config.txt
-dtparam i2c_arm=on
-modprobe i2c-dev
+sed -i '$ai2c-dev' /etc/modules
 
 #Luftfeuchigkeit Setup
 echo "Setup Luftfeuchtigkeit..."
