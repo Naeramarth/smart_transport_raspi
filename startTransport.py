@@ -36,7 +36,7 @@ def on_publish(mqttc, obj, mid):
 
 #Vibration Sensor
 def publish_vibration(null):
-    client.publish(prefix + deviceCode + "/vibra", True)
+    client.publish(securityCode + prefix + deviceCode + "/vibra", True)
 
 GPIO_pin_vibration = 24
 GPIO.setup(GPIO_pin_vibration, GPIO.IN, pull_up_down = GPIO.PUD_UP)
