@@ -19,6 +19,7 @@ port = 1883
 prefix = "/trn"
 deviceCode = "/device98765"
 meassureInteval = 5
+securityCode = ""
 
 ##############################################
 #MQTT
@@ -80,10 +81,10 @@ if __name__ == '__main__':
             preassure = sensors.currPreassure()
 
             #Publish MQTT
-            client.publish(prefix+deviceCode+"/temp", temp)
-            client.publish(prefix + deviceCode + "/humid", humid)
-            client.publish(prefix + deviceCode + "/preassure", preassure)
-            client.publish(prefix + deviceCode + "/battery", sensors.batteryLife)
+            client.publish(securityCode + prefix + deviceCode + "/temp", temp)
+            client.publish(securityCode + prefix + deviceCode + "/humid", humid)
+            client.publish(securityCode + prefix + deviceCode + "/preassure", preassure)
+            client.publish(securityCode + prefix + deviceCode + "/battery", sensors.batteryLife)
 
             # DB Insertion
             values = [("temp", temp, str(datetime.datetime.now())),
