@@ -19,7 +19,7 @@ port = 1883
 prefix = "/trn"
 deviceCode = "/device98765"
 meassureInteval = 5
-securityCode = ""
+securityCode = "/408dba31c8a76428eff0"
 
 ##############################################
 #MQTT
